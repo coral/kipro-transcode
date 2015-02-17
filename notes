@@ -1,0 +1,7 @@
+http:///config?action=set&paramid=
+
+REC/PLAY
+http://10.47.15.135/config?action=set&paramid=eParamID_MediaState&value=0
+
+DATA-LAN
+http://10.47.15.135/config?action=set&paramid=eParamID_MediaState&value=1
