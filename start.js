@@ -5,8 +5,10 @@ var _ = require('underscore');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var KiPro = require("kipro").KiPro;
+var Transcoder = require("./transcode.js").Transcoder;
 
 var kipro = new KiPro("10.47.15.135");
+var transcoder = new Transcoder();
 
 var directory = '';
 
@@ -25,11 +27,11 @@ kipro.getClips(function(clips){
 				console.error(err);
 			} else {
 				fs.exists(directory + newDate + '/' + clip.clipname, function(exists) {
-				   	if(!exists)
-				   	{
-						kipro.getMedia(clip.clipname, directory + newDate + '/' + clip.clipname, function(file, location) {
-							console.log(file, location);
-							//Add to transcode queue
+					if(!exists)
+					{
+						kipro.getMedia(clip.clipname, directory + newDate + '/' + clip.clipname, function(status, location, file) {
+							transcoder.addToQueue(location, directory + newDate + '/' + file.slice(0, -3) + "mp4");
+							transcoder.run();
 						});
 				   	}
 				});
@@ -47,49 +49,3 @@ function numPad0( str ){
 	}
 	return str;
 }
-/*
-kipro.getMedia("RECORDING_1.mov", "test.mov", function(file, location) {
-	console.log(file, location)
-});
-/*
- kipro.getMedia("RECORDING_1.mov", "test.mov", function(file, location) {
-						console.log(file, location)
-					});
-/*
-request('http://10.47.15.135/clips?action=get_playlists', function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(body) // Show the HTML for the Google homepage.
-  }
-})
-
- */
-
-//var x = request('http://10.47.15.135/media/RECORDING_12.mov');
-
-/*
-	console.log("ok");
-
-var ffmpeg = child_process.spawn("ffmpeg",[
-            "-i", x.pipe(x),             // path
-            "-vcodec" , "libx264",         // bitrate to 64k
-            "-preset", "fast", 
-            "-acodec", "libfaac",
-            "-b:v", "4000k",
-            "-movflags", "faststart",
-            "test.mp4"                     // Output to STDOUT
-    ]);
-
-
-ffmpeg.stdout.on('data', function (data) {
-  console.log('stdout: ' + data);
-});
-
-ffmpeg.stderr.on('data', function (data) {
-  console.log('stderr: ' + data);
-});
-
-ffmpeg.on('close', function (code) {
-  console.log('child process exited with code ' + code);
-});
-
-*/
