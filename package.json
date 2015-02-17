@@ -4,6 +4,9 @@
   "description": "Transfer from KiPro and Transcode script",
   "main": "start.js",
   "dependencies": {
+    "fluent-ffmpeg": "^2.0.0-rc3",
+    "kipro": "0.0.2",
+    "mkdirp": "^0.5.0",
     "request": "^2.53.0",
     "underscore": "^1.7.0"
   },
